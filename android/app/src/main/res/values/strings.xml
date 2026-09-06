@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">kwrapper</string>
+    <string name="title_activity_main">kwrapper</string>
+    <string name="package_name">net.araneae.kwrapper</string>
+    <string name="custom_url_scheme">net.araneae.kwrapper</string>
+</resources>
