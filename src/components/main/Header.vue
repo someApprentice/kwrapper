@@ -1,5 +1,9 @@
 <template>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
     <ion-title>{{ title }}</ion-title>
 
     <ion-buttons slot="end">
@@ -14,7 +18,13 @@
 </template>
 
 <script setup lang="ts">
-  import { IonToolbar, IonTitle, IonButtons, IonToggle } from '@ionic/vue';
+  import {
+    IonButtons,
+    IonBackButton,
+    IonTitle,
+    IonToggle
+    IonToolbar,
+  } from '@ionic/vue';
 
   interface HeaderProps {
     title: string;
