@@ -12,6 +12,12 @@
           <NotificationsSettings />
         </ion-label>
       </ion-item>
+
+      <ion-item>
+        <ion-label>
+          <StorageSettings />
+        </ion-label>
+      </ion-item>
     </ion-list>
   </main>
 </template>
@@ -25,4 +31,5 @@
 
   import TokenSettings from '@/components/settings/token/TokenSettings.vue';
   import NotificationsSettings from '@/components/settings/notifications/NotificationsSettings.vue';
+  import StorageSettings from '@/components/settings/storage/StorageSettings.vue';
 </script>
