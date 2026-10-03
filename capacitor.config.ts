@@ -5,6 +5,9 @@ const config: CapacitorConfig = {
   appName: 'kwrapper',
   webDir: 'dist',
   plugins: {
+    SplashScreen: {
+      launchAutoHide: false,
+    },
     PushNotifications: {
       presentationOptions: ["badge", "sound", "alert", "banner", "list"],
     }

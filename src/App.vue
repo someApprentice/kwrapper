@@ -25,14 +25,10 @@
   const { token, hash, isAuthenticated } = storeToRefs(authStore);
 
   async function init() {
-    await SplashScreen.show({
-      autoHide: false,
-    });
-
     await authStore.init();
     await fcmStore.init();
 
-    if (!isAuthenticated) return;
+    if (!isAuthenticated.value) return;
 
     router.replace('/');
 
