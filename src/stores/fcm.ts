@@ -15,9 +15,16 @@ import {
 } from '@/services/fcm';
 
 import { useAuthStore } from './auth';
+import { useProjectsStore } from './projects';
 
 // @TODO Move the constant into the env variables.
 export const SECURE_STORAGE_FCM_TOKEN_KEY = 'fcm_token';
+
+const SILENT_MESSAGE_TYPE = import.meta.env.VITE_FCM_SILENT_MESSAGE_TYPE;
+const NOTIFICATION_MESSAGE_TYPE = import.meta.env.VITE_FCM_NOTIFICATION_MESSAGE_TYPE;
+
+const FCM_PROJECT_NAMESPACE = import.meta.env.VITE_FCM_PROJECT_NAMESPACE;
+
 
 export const useFcmStore = defineStore('fcm', () => {
   const token = ref<string|undefined>();
@@ -29,6 +36,7 @@ export const useFcmStore = defineStore('fcm', () => {
   const error = ref<string|undefined>();
 
   const authStore = useAuthStore();
+  const projectsStore = useProjectsStore();
 
   const { isAuthenticated } = storeToRefs(authStore);
 
@@ -68,9 +76,40 @@ export const useFcmStore = defineStore('fcm', () => {
     error.value = err;
   }
 
-  function onNotification(notification: PushNotificationSchema) {
-    // @TODO
-    // ...
+  async function onNotification(notification: PushNotificationSchema) {
+    const type = notification.data.type;
+
+    switch (type) {
+      case SILENT_MESSAGE_TYPE:
+        await onSilentNotification(notification);
+
+        break;
+
+      case NOTIFICATION_MESSAGE_TYPE:
+        break
+    }
+  }
+
+  async function onSilentNotification(notification: PushNotificationSchema) {
+    if (notification.data.type !== SILENT_MESSAGE_TYPE)
+      return;
+
+    const namespace = notification.data.namespace;
+
+    switch (namespace) {
+      case FCM_PROJECT_NAMESPACE:
+        await onSilentProjectNotification(notification);
+        break;
+    }
+  }
+
+  async function onSilentProjectNotification(notification: PushNotificationSchema) {
+    if (notification.data.type !== SILENT_MESSAGE_TYPE) return;
+    if (notification.data.namespace !== FCM_PROJECT_NAMESPACE) return;
+
+    const project = JSON.parse(notification.data.payload);
+
+    await projectsStore.merge([ project ]);
   }
 
   async function check() {
