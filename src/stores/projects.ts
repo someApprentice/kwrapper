@@ -22,7 +22,7 @@ export const useProjectsStore = defineStore('projects', () => {
       .sort((a, b) => b.activated_at - a.activated_at);
   }
 
-  async function save(p: ProjectDTO[]) {
+  async function insert(p: ProjectDTO[]) {
     if (p.length === 0) return;
 
     const statements = projects.value.map(project => {
@@ -127,7 +127,7 @@ export const useProjectsStore = defineStore('projects', () => {
   return {
     projects,
     init,
-    save,
+    insert,
     merge
   };
 });
