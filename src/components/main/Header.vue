@@ -22,7 +22,7 @@
     IonButtons,
     IonBackButton,
     IonTitle,
-    IonToggle
+    IonToggle,
     IonToolbar,
   } from '@ionic/vue';
 
