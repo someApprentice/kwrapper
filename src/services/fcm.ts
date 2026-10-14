@@ -61,21 +61,21 @@ export async function check(): Promise<PermissionState> {
 
 // How to prevent a multiple calls of this function to prevent a memory leak?
 export async function listen(
-  onRegistration: (token: Token['value']) => void,
-  onError: (error: RegistrationError['error']) => void,
-  onNotification: (notification: PushNotificationSchema) => void
+  onRegistration: (token: Token['value']) => Promise<void>|void,
+  onError: (error: RegistrationError['error']) => Promise<void>|void,
+  onNotification: (notification: PushNotificationSchema) => Promise<void>|void
 ): Promise<void> {
   // Emits on first launch of application no matter of the notification permissions.
-  await PushNotifications.addListener('registration', (token: Token) => {
-    onRegistration(token.value);
+  await PushNotifications.addListener('registration', async (token: Token) => {
+    await onRegistration(token.value);
   });
 
-  await PushNotifications.addListener('registrationError', (error: RegistrationError) => {
-    onError(error.error);
+  await PushNotifications.addListener('registrationError', async (error: RegistrationError) => {
+    await onError(error.error);
   });
 
-  await PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
-    onNotification(notification);
+  await PushNotifications.addListener('pushNotificationReceived', async (notification: PushNotificationSchema) => {
+    await onNotification(notification);
   });
 
   // @TODO
