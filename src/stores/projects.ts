@@ -23,6 +23,8 @@ export const useProjectsStore = defineStore('projects', () => {
   }
 
   async function save(p: ProjectDTO[]) {
+    if (p.length === 0) return;
+
     const statements = projects.value.map(project => {
       // @TODO move this logic to separate function.
       const keys = Object.keys(project);
@@ -58,6 +60,8 @@ export const useProjectsStore = defineStore('projects', () => {
   }
 
   async function merge(p: ProjectDTO[]) {
+    if (p.length === 0) return;
+
     const ids = p.map(project => project.id);
 
     const placeholders = ids.map(() => '?').join(',');
