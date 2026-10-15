@@ -61,6 +61,8 @@
       await sync();
     };
 
+    await fcmStore.act();
+
     await SplashScreen.hide();
 
     await StatusBar.init();

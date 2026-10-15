@@ -35,6 +35,8 @@ export const useFcmStore = defineStore('fcm', () => {
 
   const error = ref<string|undefined>();
 
+  const action = ref<ActionPerformed|undefined>();
+
   const authStore = useAuthStore();
   const projectsStore = useProjectsStore();
 
@@ -114,12 +116,22 @@ export const useFcmStore = defineStore('fcm', () => {
     await projectsStore.merge([ project ]);
   }
 
-  async function onAction(action: ActionPerformed) {
+  async function onAction(a: ActionPerformed) {
+    action.value = a;
+
+    if (!!isInitialized.value) {
+      await act();
+    }
+  }
+
+  async function act() {
     // @TODO handle `action.actionId` cases.
     // 'tap' | 'dismiss' | custom id
     // actionId: string
 
-    const namespace = action.notification.data.namespace;
+    if (!action.value) return;
+
+    const namespace = action.value.notification.data.namespace;
 
     switch (namespace) {
     }
@@ -151,6 +163,7 @@ export const useFcmStore = defineStore('fcm', () => {
     init,
     check,
     request,
-    register
+    register,
+    act
   };
 });
