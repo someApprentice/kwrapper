@@ -4,7 +4,8 @@ import {
   PushNotifications,
   Token,
   RegistrationError,
-  PushNotificationSchema
+  PushNotificationSchema,
+  ActionPerformed
 } from '@capacitor/push-notifications';
 
 import { LocalNotifications } from '@capacitor/local-notifications';
@@ -63,7 +64,8 @@ export async function check(): Promise<PermissionState> {
 export async function listen(
   onRegistration: (token: Token['value']) => Promise<void>|void,
   onError: (error: RegistrationError['error']) => Promise<void>|void,
-  onNotification: (notification: PushNotificationSchema) => Promise<void>|void
+  onNotification: (notification: PushNotificationSchema) => Promise<void>|void,
+  onAction: (action: ActionPerformed) => Promise<void>|void
 ): Promise<void> {
   // Emits on first launch of application no matter of the notification permissions.
   await PushNotifications.addListener('registration', async (token: Token) => {
@@ -78,9 +80,9 @@ export async function listen(
     await onNotification(notification);
   });
 
-  // @TODO
-  // await PushNotifications.addListener('pushNotificationReceived', onReceived);
-  // await PushNotifications.addListener('pushNotificationActionPerformed', onActivated);
+  await PushNotifications.addListener('pushNotificationActionPerformed', async (action: ActionPerformed) => {
+    await onAction(action);
+  });
 }
 
 

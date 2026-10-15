@@ -3,7 +3,7 @@ import { defineStore, storeToRefs } from 'pinia';
 import { ref } from 'vue';
 
 import { PermissionState } from '@capacitor/core';
-import { PushNotificationSchema } from '@capacitor/push-notifications';
+import { ActionPerformed, PushNotificationSchema } from '@capacitor/push-notifications';
 
 import { SecureStorage } from '@aparajita/capacitor-secure-storage';
 
@@ -48,7 +48,8 @@ export const useFcmStore = defineStore('fcm', () => {
     await listen(
       onRegistration,
       onRegistrationError,
-      onNotification
+      onNotification,
+      onAction
     );
 
     if (status.value === 'granted') {
@@ -110,6 +111,17 @@ export const useFcmStore = defineStore('fcm', () => {
     const project = JSON.parse(notification.data.payload);
 
     await projectsStore.merge([ project ]);
+  }
+
+  async function onAction(action: ActionPerformed) {
+    // @TODO handle `action.actionId` cases.
+    // 'tap' | 'dismiss' | custom id
+    // actionId: string
+
+    const namespace = action.notification.data.namespace;
+
+    switch (namespace) {
+    }
   }
 
   async function check() {
