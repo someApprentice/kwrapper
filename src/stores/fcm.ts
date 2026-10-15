@@ -2,6 +2,8 @@ import { defineStore, storeToRefs } from 'pinia';
 
 import { ref } from 'vue';
 
+import { useRouter } from 'vue-router';
+
 import { PermissionState } from '@capacitor/core';
 import { ActionPerformed, PushNotificationSchema } from '@capacitor/push-notifications';
 
@@ -37,6 +39,7 @@ export const useFcmStore = defineStore('fcm', () => {
 
   const action = ref<ActionPerformed|undefined>();
 
+  const router = useRouter();
   const authStore = useAuthStore();
   const projectsStore = useProjectsStore();
 
@@ -134,7 +137,18 @@ export const useFcmStore = defineStore('fcm', () => {
     const namespace = action.value.notification.data.namespace;
 
     switch (namespace) {
+      case FCM_PROJECT_NAMESPACE:
+        await onProjectAction(action.value);
+        break;
     }
+  }
+
+  async function onProjectAction(action: ActionPerformed) {
+    if (action.notification.data.namespace !== FCM_PROJECT_NAMESPACE) return;
+
+    const project = JSON.parse(action.notification.data.payload);
+
+    router.push(`/project/${project.id}`);
   }
 
   async function check() {
