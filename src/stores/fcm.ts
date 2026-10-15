@@ -78,12 +78,13 @@ export const useFcmStore = defineStore('fcm', () => {
   }
 
   async function onNotification(notification: PushNotificationSchema) {
+    if (!isInitialized.value) return;
+
     const type = notification.data.type;
 
     switch (type) {
       case SILENT_MESSAGE_TYPE:
         await onSilentNotification(notification);
-
         break;
 
       case NOTIFICATION_MESSAGE_TYPE:
