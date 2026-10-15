@@ -46,7 +46,7 @@ export const useFcmStore = defineStore('fcm', () => {
   const { isAuthenticated } = storeToRefs(authStore);
 
   async function init() {
-    if (!!isInitialized.value) return;
+    if (isInitialized.value) return;
 
     status.value = await chk();
 
@@ -122,7 +122,7 @@ export const useFcmStore = defineStore('fcm', () => {
   async function onAction(a: ActionPerformed) {
     action.value = a;
 
-    if (!!isInitialized.value) {
+    if (isInitialized.value) {
       await act();
     }
   }
